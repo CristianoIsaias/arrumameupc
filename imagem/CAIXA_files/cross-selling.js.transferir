@@ -1,0 +1,130 @@
+function Valida_Cross_Selling() {
+    if (typeof (Storage) !== "undefined") {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+function Ler_Cross_Selling(url) {
+
+    if (Valida_Cross_Selling() == true) { //valida api Web Storage
+        if (localStorage.getItem(url) != null) { // valida registro WebStorage no navegador
+            qtd_acesso = localStorage.getItem(url); // pega quantidade de acesso
+            
+           // alert(qtd_acesso);
+            return url + ";" + qtd_acesso;
+          
+        } else {
+         return url + ";" +  0;
+        }
+
+
+    } else {
+        // Navegador sem suporte ao WebStorage
+        
+    }
+
+}
+
+
+function UrlExterna(url) {
+
+    if (Valida_Cross_Selling() == true) { //valida api Web Storage
+        if (localStorage.getItem(url) != null) { // valida registro WebStorage no navegador
+            
+            return true;
+          
+        } else {
+         return false;
+        }
+
+
+    } else {
+        // Navegador sem suporte ao WebStorage
+        
+    }
+
+}
+
+
+function Grava_Cross_Selling(url) {
+
+    if (Valida_Cross_Selling() == true) { //valida api Web Storage
+        if (localStorage.getItem(url) != null) { // valida registro WebStorage no navegador
+            qtd_acesso = localStorage.getItem(url); // pega quantidade de acesso
+            qtd_acesso = parseInt(qtd_acesso) + 1;
+            localStorage.removeItem(url);
+            localStorage.setItem(url, qtd_acesso); // atualiza WebStorage com quantidade de acesso
+            //alert(qtd_acesso);
+            
+
+           
+        } else {
+            //alert("Sem Acessos");
+             pri_acesso = 1;
+             localStorage.setItem(url, pri_acesso);
+            //alert('Primeiro acesso');
+            // PageMethods.TesteParametro(pri_acesso, onSuccessMethod, onFailMethod);
+
+           
+        }
+
+
+    } else {
+        // Navegador sem suporte ao WebStorage
+    }
+
+// Inicio Chamada CrossSellingHome  22/03/2015 - Adryan Leao
+ CrossSellingHome(url);
+
+}
+
+function CrossSellingHome(nome) {
+    // Cria uma data 01/01/2020
+   // alert("CrossSellingHome");
+    var cookie = ValorCookiesCrossSellingHome(nome)
+    
+    if(cookie == false){
+    
+    data = new Date();
+ dia = data.getDate();
+ mes = data.getMonth();
+ ano = data.getFullYear();
+ 
+ datacompleta = new Date(ano + 1,mes,dia);
+    // Converte a data para GMT
+    datacompleta = datacompleta.toGMTString();
+    // Codifica o valor do cookie para evitar problemas
+    valor = encodeURI("1");
+    // Cria o novo cookie
+    document.cookie = nome + '=' + valor + '; expires=' + datacompleta + '; path=/';
+    }
+    else
+    {
+     data = new Date();
+  dia = data.getDate();
+  mes = data.getMonth();
+  ano = data.getFullYear();
+ 
+     datacompleta = new Date(ano + 1,mes,dia);
+        // Converte a data para GMT
+        datacompleta = datacompleta.toGMTString();
+     var qtdAcessos = parseInt(cookie) + 1;
+     document.cookie = nome + '=' + qtdAcessos + '; expires=' + datacompleta + '; path=/';
+
+    }
+}
+
+function ValorCookiesCrossSellingHome(name){
+    var pattern = RegExp(name + "=.[^;]*")
+    matched = document.cookie.match(pattern)
+    if(matched){
+        var cookie = matched[0].split('=')
+        return cookie[1]
+    }
+    return false
+}
+
+$(document).ready(Grava_Cross_Selling(document.location.pathname.toLowerCase()));

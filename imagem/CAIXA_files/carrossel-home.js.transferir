@@ -1,0 +1,105 @@
+﻿CarrosselHome = (function () {
+    'use strict'
+    const carrosselHome = {};
+
+    carrosselHome.iniciar = function () {
+        registrarEventos();
+        montarSlides();
+    };
+
+    const aplicarCorDesktop = function (indice) {
+        const cor = jQuery('#carrosselHomeDesktop div[data-slick-index="' + indice + '"]').attr('data-cor');
+
+        jQuery('.buttons .next-btn i').removeClass('azul').removeClass('branco');
+        jQuery('.buttons .prev-btn i').removeClass('azul').removeClass('branco');
+        jQuery('.buttons .slide-m-dots-desktop button').removeClass('azul').removeClass('branco');
+        jQuery('.icone-play-pause').removeClass('azul').removeClass('branco');
+        jQuery('.buttons .prev-btn i').addClass(cor);
+        jQuery('.buttons .next-btn i').addClass(cor);
+        jQuery('.buttons .slide-m-dots-desktop button').addClass(cor);
+        jQuery('.icone-play-pause').addClass(cor);
+    };
+
+    const aplicarCorMobile = function (indice) {
+        const cor = jQuery('#carrosselHomeMobile div[data-slick-index="' + indice + '"]').attr('data-cor');
+
+        jQuery('.buttons .slide-m-dots-mobile button').removeClass('azul').removeClass('branco');
+        jQuery('.buttons .slide-m-dots-mobile button').addClass(cor);
+    };
+
+    const montarSlides = function () {
+        jQuery("#carrosselHomeDesktop").slick({
+            dots: true,
+            fade: false,
+            pauseOnHover: false,
+            arrows: true,
+            prevArrow: jQuery(".prev-btn"),
+            appendDots: jQuery(".slide-m-dots-desktop"),
+            nextArrow: jQuery(".next-btn"),
+            infinite: true,
+            autoplay: true,
+            autoplaySpeed: 10000,
+            speed: 300,
+            slidesToShow: 1,
+            adaptiveHeight: false
+        });
+
+        jQuery("#carrosselHomeMobile").slick({
+            dots: true,
+            fade: true,
+            pauseOnHover: false,
+            arrows: false,
+            appendDots: jQuery(".slide-m-dots-mobile"),
+            infinite: true,
+            autoplay: false,
+            slidesToShow: 1,
+            adaptiveHeight: false
+        });
+
+        jQuery(".carrossel-home").removeClass('oculto');
+    };
+
+    const registrarEventos = function () {
+        jQuery("#carrosselHomeDesktop").on('init', function (slick) {
+            aplicarCorDesktop(0);
+        });
+
+        jQuery("#carrosselHomeMobile").on('init', function (slick) {
+            aplicarCorMobile(0);
+        });
+
+        jQuery(".prev-btn").click(function () {
+            jQuery(".slider").slick("slickPrev");
+        });
+
+        jQuery(".next-btn").click(function () {
+            jQuery(".slider").slick("slickNext");
+        });
+
+        jQuery('#playCarrossel').click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (jQuery('.icone-play-pause').hasClass('fa-circle-play')) {
+                jQuery('.icone-play-pause').removeClass('fa-circle-play');
+                jQuery('.icone-play-pause').addClass('fa-circle-pause');
+                jQuery('.slider').slick('slickPlay');
+            }
+            else {
+                jQuery('.icone-play-pause').removeClass('fa-circle-pause');
+                jQuery('.icone-play-pause').addClass('fa-circle-play');
+                jQuery('.slider').slick('slickPause');
+            }
+        });
+
+        jQuery('#carrosselHomeDesktop').on('beforeChange', function (event, slick, currentSlide, nextSlide) {
+            aplicarCorDesktop(nextSlide);
+        });
+
+        jQuery('#carrosselHomeMobile').on('beforeChange', function (event, slick, currentSlide, nextSlide) {
+            aplicarCorMobile(nextSlide);
+        });
+    };
+
+    return carrosselHome;
+})();

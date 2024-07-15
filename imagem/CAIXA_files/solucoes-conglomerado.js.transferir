@@ -1,0 +1,46 @@
+﻿SolucoesConglomerado = (function () {
+    'use strict'
+    const solucoesConglomerado = {};
+
+    solucoesConglomerado.iniciar = function () {
+        montarSlides();
+        registrarEventos();
+    };
+
+    const montarSlides = function () {
+        jQuery('.carrossel-conglomerado').slick({
+            slidesToShow: 4,
+            slidesToScroll: 1,
+            dots: true,
+            arrows: true,
+            centerMode: false,
+            responsive: [
+                {
+                    breakpoint: 1160,
+                    settings: {
+                        arrows: false,
+                        centerMode: true,
+                        centerPadding: '40px',
+                        slidesToShow: 2
+                    }
+                },
+                {
+                    breakpoint: 600,
+                    settings: {
+                        arrows: false,
+                        centerMode: true,
+                        centerPadding: '80px',
+                        slidesToShow: 1
+                    }
+                }
+            ]
+        });
+
+        jQuery(".solucoes-conglomerado").removeClass('oculto');
+    };
+
+    const registrarEventos = function () {
+    };
+
+    return solucoesConglomerado;
+})();
